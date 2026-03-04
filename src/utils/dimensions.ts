@@ -11,6 +11,8 @@ export const HITSLOP_DIMENSION = 10;
 
 export const SEARCH_ICONS_DIMENTION = 20;
 
+export const SEARCH_BAR_HORIZONTAL_PADDING = 16;
+
 export const HeightDimentions = {
   HEIGHT_DIVIDER_1: 5,
   HEIGHT_DIVIDER_2: 10,
