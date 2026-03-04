@@ -22,7 +22,8 @@
       "_screens/*": ["./src/screens/*"],
       "_utils/*": ["./src/utils/*"],
       "_helpers/*": ["./src/helpers/*"],
-      "_validation/*": ["./src/validation/*"]
+      "_validation/*": ["./src/validation/*"],
+      "_store/*": ["./src/store/*"]
     },
     "strict": true,
     "types": ["jest", "@testing-library/jest-native"]

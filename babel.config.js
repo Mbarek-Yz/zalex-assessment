@@ -22,6 +22,7 @@ module.exports = function (api) {
             _i18n: './src/locales/i18n',
             _helpers: './src/helpers',
             _validation: './src/validation',
+            _store: './src/store',
           },
         },
       ],
