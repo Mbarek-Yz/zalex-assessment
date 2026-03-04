@@ -59,6 +59,9 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.5,
   },
+  loader: {
+    marginTop: 12,
+  },
 });
 
 export default styles;

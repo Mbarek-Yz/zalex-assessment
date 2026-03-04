@@ -22,8 +22,8 @@ import {
 } from '_validation/requestSchema';
 import styles from './requestCertificateScreenStyles';
 import { translate } from '_i18n';
-import { colors } from '_utils/colors';
 import { BASE_URL, endpoints, SUBSCRIPTION_KEY } from '_config/api';
+import CustomButton from '_components/CustomButton/CustomButton';
 
 const API_URL = `${BASE_URL}/${endpoints.CERTIFICATE}?subscription-key=${SUBSCRIPTION_KEY}`;
 
@@ -220,24 +220,15 @@ const RequestCertificateScreen: React.FC = () => {
           )}
         </View>
 
-        <TouchableOpacity
-          style={[
-            styles.submitButton,
-            isLoading && styles.submitButtonDisabled,
-          ]}
-          onPress={handleSubmit(onSubmit)}
-          disabled={isLoading}
-          accessibilityRole="button"
-          accessibilityLabel={translate('certificate.submit_certificate')}
-        >
-          {isLoading ? (
-            <ActivityIndicator color={colors.WHITE} />
-          ) : (
-            <Text style={styles.submitButtonText}>
-              {translate('certificate.submit_btn')}
-            </Text>
-          )}
-        </TouchableOpacity>
+        {isLoading ? (
+          <ActivityIndicator style={styles.loader} />
+        ) : (
+          <CustomButton
+            title={translate('certificate.submit_btn')}
+            onPress={handleSubmit(onSubmit)}
+            isDisabled={isLoading}
+          />
+        )}
       </ScrollView>
     </KeyboardAvoidingView>
   );
