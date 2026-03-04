@@ -26,7 +26,7 @@ export default StyleSheet.create({
     elevation: 1,
   },
   focusedContainer: {
-    borderColor: colors.ORANGE,
+    borderColor: colors.BLACK,
     shadowOpacity: 0.1,
     elevation: 2,
   },
