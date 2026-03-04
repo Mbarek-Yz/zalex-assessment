@@ -10,7 +10,7 @@ interface LoadingStateProps {
 }
 
 export const LoadingState: React.FC<LoadingStateProps> = ({
-  message = translate('gif.fetching_gifs'),
+  message = translate('global.fetching'),
   size = 'large',
 }) => (
   <View style={styles.centered}>

@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   errorText: {
-    color: colors.RED,
+    color: colors.ERROR_RED,
     fontSize: FontSizes.FONT_SIZE_META_1,
     textAlign: 'center',
   },
