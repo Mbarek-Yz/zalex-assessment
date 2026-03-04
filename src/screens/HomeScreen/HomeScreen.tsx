@@ -1,11 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FlatList, Text, View, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 import useFetch from '_hooks/useFetch';
 import useSortedCertificates from '_hooks/useSortedCertificates';
 import useSearch from '_hooks/useSearch';
+import useFilteredCertificates from '_hooks/useFilteredCertofocates';
 import CertificateItem from '_components/CertificateItem/CertificateItem';
 import CustomSearchBar from '_components/CustomSearchBar/CustomSearchBar';
+import CustomButton from '_components/CustomButton/CustomButton';
 import SortButton from '_components/SortButton/SortButton';
 import { ErrorState, LoadingState } from '_components/FeedbackStates';
 import {
@@ -21,12 +25,18 @@ import {
 } from '_store/certificate/certificateSlice';
 import { SortField } from '_utils/enums';
 import { useAppDispatch, useAppSelector } from '_store/store';
+import { RootStackParamList } from '_navigation/AppNavigator';
+import { REQUEST_CERTIFICATE_SCREEN } from '_utils/screenNames';
 import styles from './homeScreenStyles';
-import useFilteredCertificates from '_hooks/useFilteredCertofocates';
+import CustomDivider from '_components/CustomDivider/CustomDivider';
+import { HeightDimentions } from '_utils/dimensions';
 
 const API_URL = `${BASE_URL}/${endpoints.LIST}?subscription-key=${SUBSCRIPTION_KEY}`;
 
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const HomeScreen = () => {
+  const navigation = useNavigation<NavigationProp>();
   const dispatch = useAppDispatch();
   const certificates = useAppSelector(selectAllCertificates);
   const searchInputRef = useRef<TextInput>(null);
@@ -55,15 +65,15 @@ const HomeScreen = () => {
     [],
   );
 
-  const renderFooterComponent = () => {
-    return (
-      <Text style={styles.emptyText}>
-        {translate('certificate.no_results')}
-      </Text>
-    );
-  };
+  const renderEmptyComponent = () => (
+    <Text style={styles.emptyText}>{translate('certificate.no_results')}</Text>
+  );
 
   const keyExtractor = useCallback((item: Certificate) => item.reference, []);
+
+  const navigateToRequestCertificate = () => {
+    navigation.navigate(REQUEST_CERTIFICATE_SCREEN);
+  };
 
   if (isLoading) {
     return <LoadingState message={translate('global.loading')} />;
@@ -75,6 +85,12 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
+      <CustomButton
+        title={translate('certificate.request_btn')}
+        onPress={navigateToRequestCertificate}
+        isOutlined
+      />
+      <CustomDivider height={HeightDimentions.HEIGHT_DIVIDER_3} />
       <CustomSearchBar
         inputRef={searchInputRef}
         text={searchText}
@@ -108,7 +124,7 @@ const HomeScreen = () => {
         renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.list}
-        ListEmptyComponent={renderFooterComponent}
+        ListEmptyComponent={renderEmptyComponent}
       />
     </View>
   );

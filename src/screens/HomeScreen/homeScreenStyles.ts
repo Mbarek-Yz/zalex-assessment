@@ -29,5 +29,20 @@ const styles = StyleSheet.create({
     fontSize: FontSizes.FONT_SIZE_META_0,
     marginTop: 40,
   },
+  newRequestButton: {
+    marginBottom: 12,
+    backgroundColor: colors.PURE_WHITE,
+    borderRadius: 10,
+    paddingVertical: 11,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.BORDER_INPUT,
+  },
+  newRequestButtonText: {
+    color: colors.TITLE_DARK,
+    fontSize: FontSizes.FONT_SIZE_META_0,
+    fontWeight: '600',
+  },
 });
+
 export default styles;
