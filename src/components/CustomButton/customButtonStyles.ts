@@ -12,7 +12,7 @@ export default StyleSheet.create({
     flexDirection: 'row',
   },
   notOutlinedContainer: {
-    backgroundColor: colors.WHITE,
+    backgroundColor: colors.BLACK,
   },
   outlinedContainer: {
     borderWidth: 0.2,
@@ -23,5 +23,6 @@ export default StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     fontSize: FontSizes.FONT_SIZE_META_1,
+    fontWeight: '500',
   },
 });

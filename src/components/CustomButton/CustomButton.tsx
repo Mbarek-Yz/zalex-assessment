@@ -31,7 +31,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
     : styles.notOutlinedContainer;
   const titleStyle: StyleProp<TextStyle> = isOutlined
     ? { color: colors.BLACK }
-    : { color: colors.NEUTRAL_GREY };
+    : { color: colors.WHITE };
 
   const disabledStyle: StyleProp<ViewStyle> = isDisabled
     ? { opacity: 0.5 }
