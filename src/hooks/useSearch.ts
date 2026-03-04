@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useState } from 'react';
-import useDebounceText from './useDebounceText';
 import { DEBOUNCE_DELAY } from '_utils/constants';
+import useDebounceText from './useDebounceText';
 
 interface UseSearchReturnType {
   searchText: string;
