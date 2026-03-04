@@ -18,11 +18,11 @@ export const decodeCertificate = (
   response: CertificateResponse,
 ): Certificate => {
   return {
-    reference: response.reference_no,
-    status: response.status,
-    address: response.address_to,
-    issued_on: response.issued_on,
-    purpose: response.purpose,
+    reference: response.reference_no ?? '',
+    status: response.status ?? '',
+    address: response.address_to ?? '',
+    issued_on: response.issued_on ?? '',
+    purpose: response.purpose ?? '',
   };
 };
 
