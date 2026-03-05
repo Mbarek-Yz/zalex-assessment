@@ -45,5 +45,7 @@ const styles = StyleSheet.create({
   },
   retryButton: {
     marginTop: 8,
+    alignSelf: 'center',
+    minWidth: 120,
   },
 });
