@@ -15,6 +15,7 @@ const en = {
     server: 'Server error. Please try again later.',
     not_found: 'Resource not found.',
     unknown: 'Something went wrong. Please try again.',
+    pdf_load_error: 'failed to laod PDF.',
   },
   certificate: {
     // Screen
