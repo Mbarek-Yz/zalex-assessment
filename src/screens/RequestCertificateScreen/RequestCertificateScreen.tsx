@@ -28,7 +28,7 @@ import CustomButton from '_components/CustomButton/CustomButton';
 const API_URL = `${BASE_URL}/${endpoints.CERTIFICATE}?subscription-key=${SUBSCRIPTION_KEY}`;
 
 interface CertificateResponseBody {
-  response: string;
+  responce: string;
 }
 
 type CertificateRequestBody = Omit<RequestCertificateData, 'issued_on'> & {
@@ -59,7 +59,7 @@ const RequestCertificateScreen: React.FC = () => {
   >({
     baseUrl: API_URL,
     onSuccess: data => {
-      if (data.response === 'Ok') {
+      if (data.responce === 'Ok') {
         Alert.alert(
           translate('certificate.alert_submitted'),
           translate('certificate.alert_success'),
