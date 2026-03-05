@@ -23,6 +23,7 @@ const en = {
     sort_by: 'Sort by',
     no_results: 'No results found',
     certificate_details: 'Certificate Details',
+    edit_purpose: 'Edit purpose',
     // Field labels
     label_address_to: 'Address To',
     label_purpose: 'Purpose',
@@ -39,10 +40,12 @@ const en = {
     submit_certificate: 'Submit certificate request',
     submit_btn: 'Submit Request',
     request_btn: 'Request new certificate',
+    save_btn: 'Edit',
     // Alerts
     alert_submitted: '✅ Request Submitted',
     alert_success: 'Your certificate request has been submitted successfully.',
     alert_failed: 'Submission Failed',
+    alert_updated: 'Your certificate request has been updated successfully',
     // Detail
     certificate_pdf: 'Certificate PDF',
     certificate_not_issued: 'Certificate is yet to be issued.',
