@@ -36,8 +36,8 @@ Add your configuration (based on `.env.example`):
 
 ```env
 # API CONFIG
-API_URL="https://zalexinc.azure-api.net"
-API_KEY="your_actual_api_key_here"
+SERVER_BASE_URL="https://zalexinc.azure-api.net"
+API_SUBSCRIPTION_KEY="your_actual_api_key_here"
 ```
 
 #### Step 2: Verify `.env` is in `.gitignore`
@@ -60,8 +60,8 @@ A `.env.example` template is already provided in the repository:
 ```env
 # .env.example (already in repo)
 # API CONFIG
-API_URL="YOUR SERVER BASE URL"
-API_KEY="YOUR API KEY"
+SERVER_BASE_URL="YOUR SERVER BASE URL"
+API_SUBSCRIPTION_KEY="YOUR API KEY"
 ```
 
 Copy it to create your local `.env`:
@@ -79,12 +79,10 @@ Environment variables are injected using `react-native-config`:
 ```ts
 import Config from 'react-native-config';
 
-const apiClient = axios.create({
-  baseURL: Config.API_URL,
-  headers: {
-    'Ocp-Apim-Subscription-Key': Config.API_KEY,
-  },
-});
+export const BASE_URL = Config.SERVER_BASE_URL;
+export const SUBSCRIPTION_KEY = Config.API_SUBSCRIPTION_KEY;
+
+const API_URL = `${BASE_URL}/${endpoints.LIST}?subscription-key=${SUBSCRIPTION_KEY}`;
 ```
 
 ### 🛡️ Security Best Practices
@@ -97,8 +95,10 @@ const apiClient = axios.create({
 6. **Validate keys exist** before app initialization:
 
 ```ts
-if (!Config.API_KEY || !Config.API_URL) {
-  throw new Error('API_KEY or API_URL is missing in .env file');
+if (!Config.SERVER_BASE_URL || !Config.API_SUBSCRIPTION_KEY) {
+  throw new Error(
+    'SERVER_BASE_URL or API_SUBSCRIPTION_KEY is missing in .env file',
+  );
 }
 ```
 
@@ -140,7 +140,7 @@ npx react-native run-android
 
 ### Troubleshooting
 
-**Problem**: `Config.API_KEY` is `undefined`
+**Problem**: `Config.SERVER_BASE_URL` or `Config.API_SUBSCRIPTION_KEY` is `undefined`
 
 **Solutions**:
 
