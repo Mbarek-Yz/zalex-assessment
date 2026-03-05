@@ -1,10 +1,3 @@
-export const TOAST_BOTTOM_OFFSET = 20;
-
-export const CUSTOM_POPUP_MIN_HEIGHT = 150;
-
-export const FLAT_LIST_FOOTER_HEIGHT = 200;
-export const FLAT_LIST_FOOTER_LOADER_HEIGHT = 100;
-
 export const CUSTOM_HEADER_HEIGHT = 56;
 
 export const HITSLOP_DIMENSION = 10;
@@ -35,6 +28,3 @@ export const LineHeights = {
   LINE_HEIGHT_2: 21.6,
   LINE_HEIGHT_3: 27.6,
 };
-
-export const POST_LIST_IMAGE_DIMENSION = 200;
-export const POST_DETAILS_IMAGE_DIMENSION = 400;
