@@ -1,171 +1,265 @@
 # Zalex Employee Certification App
 
-A React Native app for managing employee certificates of employment, built with TypeScript.
-
----
+A React Native app for managing employee certificates of employment,
+built with TypeScript.
 
 ## Architecture Overview
 
 ### Core Architecture Pattern
 
-The app uses a component-based architecture with custom hooks for business logic and Redux for global state management. This approach keeps UI, state, and network concerns cleanly separated while remaining maintainable and testable.
+The app uses a component-based architecture with custom hooks for
+business logic and Redux for global state management.
 
 **Why this approach?**
 
-- **Redux (RTK) for global state** — Certificates are shared across multiple screens (list, detail, and edit). Redux enables updates to be reflected immediately across screens.
-- **Custom hooks for data fetching** — Simple data requirements are handled using `useFetch` and `usePost`, providing full control over loading states, error handling, and response transformation.
-- **Adapter pattern** — API responses are transformed into strongly typed domain models before reaching UI components.
-- **Component composition** — Screens are composed of small reusable components for better maintainability and testability.
+- Redux (RTK) for global state
+- Custom hooks for data fetching
+- Adapter pattern for API transformation
+- Component composition for reusability
 
----
+## Environment / API Injection
+
+The application uses environment variables for secure API configuration.
+
+### 🔒 How to Inject API Keys Securely
+
+**⚠️ CRITICAL: Never commit `.env` files to Git!**
+
+#### Step 1: Create Your Local `.env` File
+
+```bash
+# In the project root directory
+touch .env
+```
+
+Add your configuration (based on `.env.example`):
+
+```env
+# API CONFIG
+API_URL="https://zalexinc.azure-api.net"
+API_KEY="your_actual_api_key_here"
+```
+
+#### Step 2: Verify `.env` is in `.gitignore`
+
+Ensure your `.gitignore` includes:
+
+```gitignore
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+```
+
+#### Step 3: Copy from `.env.example` Template
+
+A `.env.example` template is already provided in the repository:
+
+```env
+# .env.example (already in repo)
+# API CONFIG
+API_URL="YOUR SERVER BASE URL"
+API_KEY="YOUR API KEY"
+```
+
+Copy it to create your local `.env`:
+
+```bash
+cp .env.example .env
+```
+
+Then edit `.env` with your actual credentials.
+
+### Usage in App
+
+Environment variables are injected using `react-native-config`:
+
+```ts
+import Config from 'react-native-config';
+
+const apiClient = axios.create({
+  baseURL: Config.API_URL,
+  headers: {
+    'Ocp-Apim-Subscription-Key': Config.API_KEY,
+  },
+});
+```
+
+### 🛡️ Security Best Practices
+
+1. **Never hardcode API keys** in source code
+2. **Never commit `.env`** to version control
+3. **Rotate keys immediately** if accidentally exposed
+4. **Use different keys** for development/staging/production
+5. **Share keys securely** via password managers (1Password, LastPass)
+6. **Validate keys exist** before app initialization:
+
+```ts
+if (!Config.API_KEY || !Config.API_URL) {
+  throw new Error('API_KEY or API_URL is missing in .env file');
+}
+```
+
+### Environment-Specific Configuration
+
+For multiple environments:
+
+```bash
+# Development
+.env.development
+
+# Staging
+.env.staging
+
+# Production
+.env.production
+```
+
+Load based on build configuration in your build scripts.
+
+### 📱 Platform-Specific Setup
+
+#### iOS
+
+After creating `.env`, rebuild:
+
+```bash
+cd ios && pod install && cd ..
+npx react-native run-ios
+```
+
+#### Android
+
+```bash
+npx react-native run-android
+```
+
+**Note**: Environment variables are bundled at build time. Restart Metro bundler and rebuild after changing `.env`.
+
+### Troubleshooting
+
+**Problem**: `Config.API_KEY` is `undefined`
+
+**Solutions**:
+
+1. Verify `.env` file exists in project root
+2. Restart Metro bundler: `yarn start --reset-cache`
+3. Clean and rebuild:
+
+   ```bash
+   # iOS
+   cd ios && rm -rf build && pod install && cd ..
+
+   # Android
+   cd android && ./gradlew clean && cd ..
+   ```
+
+4. Ensure `react-native-config` is properly linked
+
+This ensures:
+
+- ✅ Secure credential management
+- ✅ Easy environment switching
+- ✅ Clean separation of configuration and code
+- ✅ No secrets in version control
 
 ## Project Structure
 
-src/
-├── adapters/ # API response transformation and type definitions
-├── assets/ # Images and static assets
-├── components/ # Reusable UI components
-├── config/ # API endpoints and configuration
-├── hooks/ # Business logic hooks
-├── locales/ # Internationalization (i18n)
-├── navigation/ # Stack navigator and screen param types
-├── screens/ # Screen-level components
-├── store/ # Redux store, root reducer, and slices
-├── utils/ # Colors, fonts, dimensions, constants, enums
-├── validation/ # Zod schemas for form validation
-├── App.tsx
-└── Layout.tsx
-
----
+    src/
+    ├── adapters/
+    ├── assets/
+    ├── components/
+    ├── config/
+    ├── hooks/
+    ├── locales/
+    ├── navigation/
+    ├── screens/
+    ├── store/
+    ├── utils/
+    ├── validation/
+    ├── App.tsx
+    └── Layout.tsx
 
 ## Features
 
-| Feature                            | Description                                                                                      |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **F02 — Request Certificate**      | Form with address, purpose, issued date, and employee ID. Uses React Hook Form + Zod validation. |
-| **F03 — Certificate List**         | Fetches certificates with search and sorting support.                                            |
-| **F04 — Certificate Detail + PDF** | Displays certificate details with PDF preview.                                                   |
-| **F05 — Update Purpose**           | Allows editing purpose when certificate status is "New". Updates are reflected instantly.        |
+| Feature                  | Description                                |
+| ------------------------ | ------------------------------------------ |
+| Request Certificate      | Form with React Hook Form + Zod validation |
+| Certificate List         | Fetch + search + sorting                   |
+| Certificate Detail + PDF | PDF preview support                        |
+| Update Purpose           | Editable when certificate status is New    |
 
----
+## Design Decisions
 
-## Design Decisions & Considerations
+### Redux State Management
 
-### Redux for Certificate State
+Certificates are stored globally to:
 
-Certificates are stored in Redux after the initial fetch to provide a single source of truth across screens.
+- Keep data synchronized
+- Avoid repeated API calls
+- Maintain a single source of truth
 
-Design Considerations:
+### Navigation Strategy
 
-- Enables real-time UI updates when purpose is edited.
-- Avoids unnecessary network calls.
-- Adds some boilerplate code but improves consistency.
+Only certificate reference is passed between screens to:
 
----
+- Prevent stale data
+- Always fetch latest state
 
-### Navigation by Reference
+### Adapter Pattern
 
-Only the certificate `reference` is passed between screens.
-
-Design Considerations:
-
-- Prevents stale data in navigation parameters.
-- Ensures detail screens always read the latest Redux state.
-- Requires memoized selectors for performance optimization.
-
----
-
-### Adapter Pattern for API Integration
-
-API responses are transformed using adapter functions such as `decodeCertificate`.
-
-Design Considerations:
-
-- UI components receive clean and predictable data.
-- Handles missing API fields gracefully.
-- Centralizes API contract changes.
-
----
+Transforms API responses into domain models.
 
 ### Debounced Search
 
-Search input is debounced before filtering results.
-
-Design Considerations:
-
-- Improves performance by reducing re-renders.
-- Provides smoother user experience while typing.
-
----
+Improves performance during typing.
 
 ### Custom Fetch Hook
 
-A generic `useFetch<T, R>` hook is used for data fetching.
+Handles:
 
-Design Considerations:
-
-- Manages loading and error states.
-- Supports response transformation.
-- Does not implement caching (not required for current scope).
-
----
+- Loading states
+- Error states
+- Response transformation
 
 ### Zod Validation
 
-Form validation is handled using Zod schemas.
-
-Design Considerations:
-
-- Type-safe validation rules.
-- Strong integration with React Hook Form.
-- Easy to maintain and extend.
-
----
+Used for type-safe form validation.
 
 ### TypeScript Usage
 
-The project uses strict TypeScript mode.
+Strict mode enabled for better safety and maintainability.
 
-Design Considerations:
+## Third Party Libraries
 
-- Improves code safety.
-- Enhances IDE autocomplete and refactoring.
-- Detects errors early during development.
-
----
-
-## Third-Party Libraries
-
-| Library             | Purpose               |
-| ------------------- | --------------------- |
-| axios               | HTTP client           |
-| @reduxjs/toolkit    | State management      |
-| react-hook-form     | Form handling         |
-| zod                 | Validation            |
-| i18next             | Internationalization  |
-| react-native-pdf    | PDF rendering         |
-| react-native-config | Environment variables |
-| react-navigation    | Navigation            |
-| datetimepicker      | Date selection        |
-| safe-area-context   | Safe area handling    |
-
----
+| Library             | Purpose          |
+| ------------------- | ---------------- |
+| axios               | HTTP requests    |
+| @reduxjs/toolkit    | State management |
+| react-hook-form     | Form handling    |
+| zod                 | Validation       |
+| i18next             | Localization     |
+| react-native-pdf    | PDF rendering    |
+| react-native-config | Env variables    |
+| react-navigation    | Navigation       |
+| datetimepicker      | Date picker      |
+| safe-area-context   | UI safety        |
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
-- Node.js >= 22
-- Xcode (iOS development)
-- Android Studio (Android development)
-- CocoaPods (iOS)
-
----
+- Node.js
+- Xcode (iOS)
+- Android Studio
+- CocoaPods
 
 ### Installation
 
 ```bash
 yarn install
-yarn pods
+cd ios && pod install && cd ..
 yarn start
 ```
