@@ -263,3 +263,29 @@ yarn install
 cd ios && pod install && cd ..
 yarn start
 ```
+
+## Testing
+
+The app includes unit tests covering validation and view model logic.
+
+### Running Tests
+
+```bash
+# Run all tests
+yarn test
+
+# Run tests in watch mode
+yarn test --watch
+
+# Run tests with coverage
+yarn test --coverage
+```
+
+### Test Coverage
+
+- **Validation**: Zod schema validation for form inputs
+- **View Model Logic**: Custom hooks (data fetching, state management)
+- **Adapters**: API response transformation
+- **Redux**: State management reducers and selectors
+
+Tests are located in `__tests__/` directories alongside the source files.
