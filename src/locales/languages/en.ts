@@ -6,6 +6,7 @@ const en = {
     see_less: 'See Less',
     loading: 'Loading...',
     fetching: 'Fetching data...',
+    retry: 'Retry',
   },
   errors: {
     error: 'Error:',

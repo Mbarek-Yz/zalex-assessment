@@ -1,5 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FlatList, Text, View, TextInput } from 'react-native';
+import {
+  FlatList,
+  Text,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
@@ -10,6 +16,7 @@ import useFilteredCertificates from '_hooks/useFilteredCertofocates';
 import CertificateItem from '_components/CertificateItem/CertificateItem';
 import CustomSearchBar from '_components/CustomSearchBar/CustomSearchBar';
 import CustomButton from '_components/CustomButton/CustomButton';
+import CustomDivider from '_components/CustomDivider/CustomDivider';
 import SortButton from '_components/SortButton/SortButton';
 import { ErrorState, LoadingState } from '_components/FeedbackStates';
 import {
@@ -26,10 +33,12 @@ import {
 import { SortField } from '_utils/enums';
 import { useAppDispatch, useAppSelector } from '_store/store';
 import { RootStackParamList } from '_navigation/AppNavigator';
-import { REQUEST_CERTIFICATE_SCREEN } from '_utils/screenNames';
-import styles from './homeScreenStyles';
-import CustomDivider from '_components/CustomDivider/CustomDivider';
+import {
+  CERTIFICATE_DETAILS_SCREEN,
+  REQUEST_CERTIFICATE_SCREEN,
+} from '_utils/screenNames';
 import { HeightDimentions } from '_utils/dimensions';
+import styles from './homeScreenStyles';
 
 const API_URL = `${BASE_URL}/${endpoints.LIST}?subscription-key=${SUBSCRIPTION_KEY}`;
 
@@ -44,7 +53,7 @@ const HomeScreen = () => {
 
   const { searchText, setSearchText, debouncedSearchText } = useSearch();
 
-  const { data, isLoading, error } = useFetch<
+  const { data, isLoading, error, refreshData, isRefreshing, retry } = useFetch<
     Certificate,
     CertificateResponse[]
   >({
@@ -60,27 +69,51 @@ const HomeScreen = () => {
   const { sorted, sortField, sortOrder, toggleSort } =
     useSortedCertificates(filtered);
 
+  const navigateToRequestCertificate = useCallback(() => {
+    navigation.navigate(REQUEST_CERTIFICATE_SCREEN);
+  }, [navigation]);
+
+  const onCertificatePress = useCallback(
+    (item: Certificate) => {
+      navigation.navigate(CERTIFICATE_DETAILS_SCREEN, {
+        reference: item.reference,
+      });
+    },
+    [navigation],
+  );
+
   const renderItem = useCallback(
-    ({ item }: { item: Certificate }) => <CertificateItem certificate={item} />,
+    ({ item }: { item: Certificate }) => (
+      <TouchableOpacity onPress={() => onCertificatePress(item)}>
+        <CertificateItem certificate={item} />
+      </TouchableOpacity>
+    ),
+    [onCertificatePress],
+  );
+
+  const renderEmptyComponent = useCallback(
+    () => (
+      <Text style={styles.emptyText}>
+        {translate('certificate.no_results')}
+      </Text>
+    ),
     [],
   );
 
-  const renderEmptyComponent = () => (
-    <Text style={styles.emptyText}>{translate('certificate.no_results')}</Text>
+  const keyExtractor = useCallback(
+    (item: Certificate, index: number) =>
+      item.reference
+        ? `${item.reference}-${item.issued_on ?? index}`
+        : `certificate-${index}`,
+    [],
   );
-
-  const keyExtractor = useCallback((item: Certificate) => item.reference, []);
-
-  const navigateToRequestCertificate = () => {
-    navigation.navigate(REQUEST_CERTIFICATE_SCREEN);
-  };
 
   if (isLoading) {
     return <LoadingState message={translate('global.loading')} />;
   }
 
   if (error) {
-    return <ErrorState error={error} />;
+    return <ErrorState error={error} onRetry={retry} />;
   }
 
   return (
@@ -125,6 +158,8 @@ const HomeScreen = () => {
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.list}
         ListEmptyComponent={renderEmptyComponent}
+        refreshing={isRefreshing}
+        onRefresh={refreshData}
       />
     </View>
   );

@@ -66,6 +66,50 @@ const styles = StyleSheet.create({
     color: colors.SUBTITLE_GREY,
     textAlign: 'center',
   },
+  purposeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.BORDER_INPUT,
+  },
+  purposeRowContent: {
+    flex: 1,
+  },
+  purposeLabel: {
+    fontSize: FontSizes.FONT_SIZE_LABEL,
+    color: colors.SUBTITLE_GREY,
+    marginBottom: 2,
+    fontWeight: '500',
+  },
+  purposeValue: {
+    fontSize: FontSizes.FONT_SIZE_META_1,
+    color: colors.TEXT_DARK,
+  },
+  editIconButton: {
+    paddingLeft: 12,
+  },
+  editIcon: {
+    fontSize: FontSizes.FONT_SIZE_META_0,
+    color: colors.SUBTITLE_GREY,
+  },
+  editCard: {
+    backgroundColor: colors.PURE_WHITE,
+    borderRadius: 12,
+    padding: 16,
+    elevation: 2,
+    marginTop: 8,
+  },
+  purposeInput: {
+    minHeight: 80,
+  },
+  saveButton: {
+    marginTop: 12,
+    backgroundColor: colors.TITLE_DARK,
+  },
+  saveButtonText: {
+    color: colors.PURE_WHITE,
+  },
 });
 
 export default styles;

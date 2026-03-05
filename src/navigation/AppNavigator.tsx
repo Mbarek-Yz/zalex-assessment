@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from '_screens/HomeScreen/HomeScreen';
 import RequestCertificateScreen from '_screens/RequestCertificateScreen/RequestCertificateScreen';
 import CertificateDetailScreen from '_screens/CertificateDetailScreen/CertificateDetailScreen';
-import { Certificate } from '_adapters/Certificate';
 import {
   HOME_SCREEN,
   REQUEST_CERTIFICATE_SCREEN,
@@ -12,9 +11,9 @@ import {
 } from '_utils/screenNames';
 
 export type RootStackParamList = {
-  Home: undefined;
-  CertificateDetail: { certificate: Certificate };
-  RequestCertificate: undefined;
+  [HOME_SCREEN]: undefined;
+  [CERTIFICATE_DETAILS_SCREEN]: { reference: string };
+  [REQUEST_CERTIFICATE_SCREEN]: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

@@ -17,6 +17,7 @@ const certificateSlice = createSlice({
     setCertificates: (state, action: PayloadAction<Certificate[]>) => {
       state.certificates = action.payload;
     },
+
     updatePurpose: (
       state,
       action: PayloadAction<{ reference: string; purpose: string }>,
@@ -24,7 +25,8 @@ const certificateSlice = createSlice({
       const cert = state.certificates.find(
         c => c.reference === action.payload.reference,
       );
-      if (cert) {
+
+      if (cert && cert.status?.toLowerCase() === 'new') {
         cert.purpose = action.payload.purpose;
       }
     },
