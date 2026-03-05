@@ -1,19 +1,29 @@
 import { initReactI18next } from 'react-i18next';
-import { NativeModules } from 'react-native';
 import i18n from 'i18next';
+import * as RNLocalize from 'react-native-localize';
 
-import { IS_IOS } from '_utils/constants';
 import en, { TranslationsType } from '_languages/en';
 
 const i18nInstance = i18n.createInstance();
 
-const rawLanguage = IS_IOS
-  ? NativeModules.SettingsManager.getConstants().settings.AppleLocale ||
-    NativeModules.SettingsManager.getConstants().AppleLanguages[0]
-  : NativeModules.I18nManager.localeIdentifier;
+/**
+ * Device language detection (Safe for Android + iOS)
+ */
+const getDeviceLanguage = (): string => {
+  try {
+    const locales = RNLocalize.getLocales();
 
-export const appLanguage: string =
-  typeof rawLanguage === 'string' ? rawLanguage : 'en';
+    if (locales && locales.length > 0) {
+      return locales[0].languageCode;
+    }
+
+    return 'en';
+  } catch {
+    return 'en';
+  }
+};
+
+export const appLanguage: string = getDeviceLanguage();
 
 i18nInstance
   .use(initReactI18next)
@@ -24,7 +34,7 @@ i18nInstance
         translation: en,
       },
     },
-    lng: appLanguage.split('_')[0],
+    lng: appLanguage,
     fallbackLng: 'en',
     interpolation: {
       escapeValue: false,
@@ -34,30 +44,31 @@ i18nInstance
     console.log('I18n error', err);
   });
 
+/**
+ * Translation helper
+ */
 export function translate(name: TxKeyPath, params = {}): string {
   return i18nInstance.t(name, params);
 }
 
 export default i18nInstance;
 
+/**
+ * Recursive translation key typing (Autocomplete safe)
+ */
 export type TxKeyPath = RecursiveKeyOf<TranslationsType>;
+
 type RecursiveKeyOf<TObj extends object> = {
-  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<
-    TObj[TKey],
-    `${TKey}`
-  >;
+  [TKey in keyof TObj & (string | number)]: TObj[TKey] extends object
+    ? `${TKey}` | `${TKey}${RecursiveKeyOfInner<TObj[TKey]>}`
+    : `${TKey}`;
 }[keyof TObj & (string | number)];
+
 type RecursiveKeyOfInner<TObj extends object> = {
-  [TKey in keyof TObj & (string | number)]: RecursiveKeyOfHandleValue<
-    TObj[TKey],
-    `['${TKey}']` | `.${TKey}`
-  >;
+  [TKey in keyof TObj & (string | number)]:
+    | `.${TKey}`
+    | `['${TKey}']`
+    | (TObj[TKey] extends object
+        ? `${'.' | "['"}${TKey}${RecursiveKeyOfInner<TObj[TKey]>}`
+        : never);
 }[keyof TObj & (string | number)];
-type RecursiveKeyOfHandleValue<
-  TValue,
-  Text extends string,
-> = TValue extends any[]
-  ? Text
-  : TValue extends object
-  ? Text | `${Text}${RecursiveKeyOfInner<TValue>}`
-  : Text;

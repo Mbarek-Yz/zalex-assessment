@@ -4,7 +4,7 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest-setup.js'],
 
   transformIgnorePatterns: [
-    'node_modules/(?!(react-native|@react-native|@react-navigation|@testing-library|@react-native-community|@react-native-community/datetimepicker|@reduxjs/toolkit|immer|redux|react-redux|react-native-pdf)/)',
+    'node_modules/(?!(react-native|@react-native|@react-navigation|@testing-library|@react-native-community|@reduxjs|immer|redux|react-redux|react-native-localize)/)',
   ],
 
   collectCoverageFrom: [
