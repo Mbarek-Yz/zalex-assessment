@@ -184,7 +184,7 @@ const RequestCertificateScreen: React.FC = () => {
                     minimumDate={new Date(Date.now() + 86400000)}
                     display={Platform.OS === 'ios' ? 'inline' : 'default'}
                     onChange={(_, selected) => {
-                      setShowDatePicker(Platform.OS === 'ios');
+                      setShowDatePicker(false);
                       if (selected) onChange(selected);
                     }}
                   />
