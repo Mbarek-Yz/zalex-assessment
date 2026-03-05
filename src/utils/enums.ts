@@ -13,3 +13,10 @@ export enum CertificateStatus {
   DONE = 'done',
   PENDING = 'pending',
 }
+
+export const RequestCertificateFields = {
+  ADDRESS_TO: 'address_to',
+  PURPOSE: 'purpose',
+  ISSUED_ON: 'issued_on',
+  EMPLOYEE_ID: 'employee_id',
+} as const;

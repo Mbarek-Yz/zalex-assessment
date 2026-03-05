@@ -24,6 +24,7 @@ import styles from './requestCertificateScreenStyles';
 import { translate } from '_i18n';
 import { BASE_URL, endpoints, SUBSCRIPTION_KEY } from '_config/api';
 import CustomButton from '_components/CustomButton/CustomButton';
+import { RequestCertificateFields } from '_utils/enums';
 
 const API_URL = `${BASE_URL}/${endpoints.CERTIFICATE}?subscription-key=${SUBSCRIPTION_KEY}`;
 
@@ -105,7 +106,7 @@ const RequestCertificateScreen: React.FC = () => {
         <View style={styles.fieldWrapper}>
           <Controller
             control={control}
-            name="address_to"
+            name={RequestCertificateFields.ADDRESS_TO}
             render={({ field: { onChange, value, onBlur } }) => (
               <CustomTextInput
                 label={translate('certificate.label_address_to')}
@@ -126,7 +127,7 @@ const RequestCertificateScreen: React.FC = () => {
         <View style={styles.fieldWrapper}>
           <Controller
             control={control}
-            name="purpose"
+            name={RequestCertificateFields.PURPOSE}
             render={({ field: { onChange, value, onBlur } }) => (
               <CustomTextInput
                 label={translate('certificate.label_purpose')}
@@ -151,7 +152,7 @@ const RequestCertificateScreen: React.FC = () => {
           </Text>
           <Controller
             control={control}
-            name="issued_on"
+            name={RequestCertificateFields.ISSUED_ON}
             render={({ field: { onChange, value } }) => (
               <>
                 <TouchableOpacity
@@ -202,7 +203,7 @@ const RequestCertificateScreen: React.FC = () => {
         <View style={styles.fieldWrapper}>
           <Controller
             control={control}
-            name="employee_id"
+            name={RequestCertificateFields.EMPLOYEE_ID}
             render={({ field: { onChange, value, onBlur } }) => (
               <CustomTextInput
                 label={translate('certificate.label_employee_id')}
