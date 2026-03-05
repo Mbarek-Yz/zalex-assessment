@@ -73,7 +73,7 @@ describe('useFetch', () => {
     expect(result.current.data).toEqual([{ id: 1 }]);
 
     await act(async () => {
-      await result.current.refetch();
+      await result.current.retry();
     });
 
     expect(result.current.data).toEqual([{ id: 2 }]);
