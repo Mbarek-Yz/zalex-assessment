@@ -11,12 +11,19 @@ const useFilteredCertificates = (
     const trimmed = query.trim();
     const lower = trimmed.toLowerCase();
 
-    return certificates.filter(
-      cert =>
-        cert.reference === trimmed ||
+    return certificates.filter(cert => {
+      if (!cert) return false;
+
+      const ref = String(cert.reference ?? '')
+        .trim()
+        .toLowerCase();
+
+      return (
+        ref === lower ||
         cert.address.toLowerCase().includes(lower) ||
-        cert.status.toLowerCase() === lower,
-    );
+        cert.status.toLowerCase() === lower
+      );
+    });
   }, [certificates, query]);
 };
 
